@@ -1,0 +1,39 @@
+.task-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-list-table th, .task-list-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.task-list-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+}
+
+.task-list-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.user-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list-table th, .user-list-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.user-list-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+}
+
+.user-list-table tr:hover {
+  background-color: #f5f5f5;
+}
