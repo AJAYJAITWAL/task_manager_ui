@@ -6,6 +6,7 @@ import TicketForm from './TicketForm';
 const TicketList = () => {
   const [tasks, setTasks] = useState([]);
   const [token, setToken] = useState('');
+  const [editTicket, setEditTicket] = useState(null);
 
   useEffect(() => {
     if (getToken) {
@@ -33,8 +34,20 @@ const TicketList = () => {
     }
   }, [token]);
 
+  const handleCreate = () => {
+    setEditTicket(null);
+  };
+
   const handleEdit = (taskId) => {
-    console.log('Edit task with ID:', taskId);
+    const taskToEdit = tasks.find(task => task.id === taskId);
+    setEditTicket(taskToEdit);
+  };
+
+  const handleTicketUpdated = (updatedTicket) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === updatedTicket.id ? updatedTicket : task
+    );
+    setTasks(updatedTasks);
   };
 
   const handleDelete = async (taskId) => {
@@ -61,7 +74,7 @@ const TicketList = () => {
 
   return (
     <div className='container my-3'>
-      <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal">Create Ticket</button>
+      <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={handleCreate}>Create Ticket</button>
       <h2>Ticket List</h2>
       <table className='task-list-table'>
         <thead>
@@ -80,7 +93,7 @@ const TicketList = () => {
               <td>{task.description}</td>
               <td>{task.status}</td>
               <td>
-                <button className='btn btn-warning' onClick={() => handleEdit(task.id)}>Edit</button>
+                <button className='btn btn-warning' data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={() => handleEdit(task.id)}>Edit</button>
               </td>
               <td>
                 <button className='btn btn-danger' onClick={() => handleDelete(task.id)}>Delete</button>
@@ -89,7 +102,11 @@ const TicketList = () => {
           ))}
         </tbody>
       </table>
-      <TicketForm onTicketCreated={handleTicketCreated}/>
+      <TicketForm
+        ticketToEdit={editTicket}
+        onTicketCreated={handleTicketCreated}
+        onTicketUpdated={handleTicketUpdated}
+      />
     </div>
   );
 };
