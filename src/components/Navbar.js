@@ -25,7 +25,7 @@ export default function Navbar() {
               <li className="nav-item">
                 <a className="nav-link active" aria-current="page" href="/">Home</a>
               </li>
-              <Link to="/task_list" className="nav-link">Tasks</Link>
+              <Link to="/ticket_list" className="nav-link">Tickets</Link>
               <Link to="/user_list" className="nav-link">Users</Link>
             </ul>
             <form className="d-flex">

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 
-export default function TicketForm() {
+export default function TicketForm( { onTicketCreated } ) {
   let navigate = useNavigate();
 
   const [token, setToken] = useState('');
@@ -36,10 +36,31 @@ export default function TicketForm() {
           Authorization: `${token}`,
         },
       });
-      navigate('/task_list')
-      console.log(response.data);
+      navigate('/ticket_list')
+      closeModal();
+      setFormData({
+        title: '',
+        description: '',
+        status: 'pending',
+      });
+
+      const newTicket = response.data;
+      onTicketCreated(newTicket);
+
     } catch (error) {
       console.error('Error:', error);
+    }
+  };
+
+  const closeModal = () => {
+    const modal = document.getElementById('createTaskModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+      const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
+      if (modalBackdrop) {
+        modalBackdrop.parentNode.removeChild(modalBackdrop); // Remove the modal backdrop
+      }
     }
   };
 
@@ -50,7 +71,7 @@ export default function TicketForm() {
         <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Create Task</h5>
+              <h5 className="modal-title">Create Ticket</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body">
@@ -63,8 +84,8 @@ export default function TicketForm() {
                 <textarea className="form-control" name="description" value={formData.description} onChange={handleChange}></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="taskStatus" className="form-label" name="status" value={status}  onChange={(e) => setStatus(e.target.value)}>Status</label>
-                <select className="form-select" id="taskStatus">
+                <label htmlFor="taskStatus" className="form-label" >Status</label>
+                <select className="form-select" id="taskStatus" name="status" value={status} onChange={handleChange}>
                   <option value="new_unassigned">New Unassigned</option>
                   <option value="open_assigned">Open Assigned</option>
                   <option value="in_progress">In Progress</option>
@@ -76,7 +97,7 @@ export default function TicketForm() {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="submit" className="btn btn-primary">Create Task</button>
+              <button type="submit" className="btn btn-primary">Create Ticket</button>
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
           </div>

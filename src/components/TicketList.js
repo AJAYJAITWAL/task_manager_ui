@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import TicketForm from './TicketForm';
 
-const TaskList = () => {
+const TicketList = () => {
   const [tasks, setTasks] = useState([]);
   const [token, setToken] = useState('');
 
@@ -38,22 +38,30 @@ const TaskList = () => {
   };
 
   const handleDelete = async (taskId) => {
-    try {
-      await axios.delete(`/tickets/${taskId}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      setTasks(tasks.filter(task => task.id !== taskId));
-      console.log('Task deleted successfully!');
-    } catch (error) {
-      console.error('Error deleting task:', error);
+    const confirmDelete = window.confirm('Are you sure you want to delete this ticket?');
+
+    if (confirmDelete) {
+      try {
+        await axios.delete(`/tickets/${taskId}`, {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        setTasks(tasks.filter(task => task.id !== taskId));
+        console.log('Task deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting task:', error);
+      }
     }
+  };
+
+  const handleTicketCreated = (newTicket) => {
+    setTasks([...tasks, newTicket]);
   };
 
   return (
     <div className='container my-3'>
-      <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal">Create Task</button>
+      <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal">Create Ticket</button>
       <h2>Ticket List</h2>
       <table className='task-list-table'>
         <thead>
@@ -81,9 +89,9 @@ const TaskList = () => {
           ))}
         </tbody>
       </table>
-      <TicketForm/>
+      <TicketForm onTicketCreated={handleTicketCreated}/>
     </div>
   );
 };
 
-export default TaskList;
+export default TicketList;

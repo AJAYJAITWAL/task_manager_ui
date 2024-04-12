@@ -41,6 +41,7 @@ const UserList = () => {
             <th>Name</th>
             <th>Email</th>
             <th>Username</th>
+            <th>Role</th>
             <th>Tickets</th>
           </tr>
         </thead>
@@ -50,6 +51,7 @@ const UserList = () => {
               <td>{user.name}</td>
               <td>{user.email}</td>
               <td>{user.username}</td>
+              <td>{user.role}</td>
               <td>{user.username.length}</td>
             </tr>
           ))}
