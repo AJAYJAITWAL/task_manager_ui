@@ -3,6 +3,7 @@ import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import TicketForm from './TicketForm';
 import { useNavigate } from 'react-router-dom';
+import ReactPaginate from 'react-paginate';
 
 const TicketList = () => {
   let navigate = useNavigate();
@@ -10,6 +11,9 @@ const TicketList = () => {
   const [token, setToken] = useState('');
   const [editTicket, setEditTicket] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [currentPage, setCurrentPage] = useState(0);
+  const [tasksPerPage] = useState(5);
+  const pageCount = Math.ceil(tasks.length / tasksPerPage);
 
   useEffect(() => {
     if (getToken) {
@@ -99,6 +103,13 @@ const TicketList = () => {
     }
   });
 
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const offset = currentPage * tasksPerPage;
+  const paginatedTasks = sortedTasks.slice(offset, offset + tasksPerPage);
+
   return (
     <div className='container my-3'>
       <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={handleCreate}>Create Ticket</button>
@@ -115,7 +126,7 @@ const TicketList = () => {
           </tr>
         </thead>
         <tbody>
-          {sortedTasks.map(task => (
+          {paginatedTasks.map(task => (
             <tr key={task.id}>
               <td>{task.id}</td>
               <td>{task.title}</td>
@@ -135,6 +146,19 @@ const TicketList = () => {
         ticketToEdit={editTicket}
         onTicketCreated={handleTicketCreated}
         onTicketUpdated={handleTicketUpdated}
+      />
+      <ReactPaginate
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        pageCount={pageCount}
+        onPageChange={handlePageClick}
+        containerClassName={'pagination justify-content-center my-5'}
+        activeClassName={'active'}
+        previousClassName={'page-item'}
+        nextClassName={'page-item'}
+        previousLinkClassName={'page-link'}
+        nextLinkClassName={'page-link'}
+        disabledClassName={'disabled'}
       />
     </div>
   );
