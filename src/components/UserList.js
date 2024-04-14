@@ -52,7 +52,7 @@ const UserList = () => {
               <td>{user.email}</td>
               <td>{user.username}</td>
               <td>{user.role}</td>
-              <td>{user.username.length}</td>
+              <td>{user.ticket_count}</td>
             </tr>
           ))}
         </tbody>

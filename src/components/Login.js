@@ -26,8 +26,8 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
       });
-      setToken(response.data.token);
-      navigate('/task_list')
+      setToken(response.data);
+      navigate('/ticket_list');
       console.log(response.data);
     } catch (error) {
       console.error('Error:', error);
@@ -37,6 +37,7 @@ const Login = () => {
   return (
     <div>
       <h2 className='text-center my-3'>Login</h2>
+      <h4 className='container my-3'>Please log in to access the application</h4>
       <form onSubmit={handleSubmit}>
         <div className="mb-3 container">
           <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>

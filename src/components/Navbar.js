@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { removeToken } from '../utils/authUtils';
 
 export default function Navbar() {
@@ -26,15 +25,22 @@ export default function Navbar() {
                 <a className="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <Link to="/ticket_list" className="nav-link">Tickets</Link>
-              <Link to="/user_list" className="nav-link">Users</Link>
+              {localStorage.getItem('token') && localStorage.getItem('userRole') == 'admin' && (
+                <Link to="/user_list" className="nav-link">Users</Link>
+              )}
             </ul>
             <form className="d-flex">
               <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
               <button className="btn btn-primary" type="submit">Search</button>
             </form>
-            <Link className='btn btn-danger mx-2' onClick={handleLogout}>Logout</Link>
-            <Link to="/login" className='mx-2 btn btn-primary'>Login</Link>
-            <Link to="/signup" className='mx-2 btn btn-primary'>Sign Up</Link>
+            {localStorage.getItem('token') ? (
+              <Link className="btn btn-danger mx-2" onClick={handleLogout}>Logout</Link>
+            ) : (
+              <>
+                <Link to="/login" className="mx-2 btn btn-primary">Login</Link>
+                <Link to="/signup" className="mx-2 btn btn-primary">Sign Up</Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

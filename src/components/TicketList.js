@@ -2,17 +2,27 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import TicketForm from './TicketForm';
+import { useNavigate } from 'react-router-dom';
 
 const TicketList = () => {
+  let navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [token, setToken] = useState('');
   const [editTicket, setEditTicket] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   useEffect(() => {
     if (getToken) {
       setToken(getToken);
     }
   }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (token) {
@@ -72,6 +82,23 @@ const TicketList = () => {
     setTasks([...tasks, newTicket]);
   };
 
+
+  const sortTable = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedTasks = [...tasks].sort((a, b) => {
+    if (sortConfig.direction === 'asc') {
+      return a[sortConfig.key] < b[sortConfig.key] ? -1 : 1;
+    } else {
+      return a[sortConfig.key] > b[sortConfig.key] ? -1 : 1;
+    }
+  });
+
   return (
     <div className='container my-3'>
       <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={handleCreate}>Create Ticket</button>
@@ -79,16 +106,18 @@ const TicketList = () => {
       <table className='task-list-table'>
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Status</th>
+            <th className='cursor-pointer' onClick={() => sortTable('id')}>ID</th>
+            <th className='cursor-pointer' onClick={() => sortTable('title')}>Title</th>
+            <th className='cursor-pointer' onClick={() => sortTable('description')}>Description</th>
+            <th className='cursor-pointer' onClick={() => sortTable('status')}>Status</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {tasks.map(task => (
+          {sortedTasks.map(task => (
             <tr key={task.id}>
+              <td>{task.id}</td>
               <td>{task.title}</td>
               <td>{task.description}</td>
               <td>{task.status}</td>

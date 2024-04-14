@@ -3,6 +3,10 @@
   border-collapse: collapse;
 }
 
+.task-list-table .cursor-pointer {
+  cursor: pointer;
+}
+
 .task-list-table th, .task-list-table td {
   border: 1px solid #ddd;
   padding: 8px;

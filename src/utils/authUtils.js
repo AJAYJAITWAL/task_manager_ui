@@ -2,8 +2,9 @@ export const getToken = () => {
   return localStorage.getItem('token');
 };
 
-export const setToken = (token) => {
-  localStorage.setItem('token', token);
+export const setToken = (data) => {
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('userRole', data.role);
 };
 
 export const removeToken = () => {

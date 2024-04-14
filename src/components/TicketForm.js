@@ -55,6 +55,12 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
       console.log(response.data);
       onTicketCreated(response.data);
       closeModal();
+
+      setFormData({
+        title: '',
+        description: '',
+        status: 'pending',
+      });
     } catch (error) {
       console.error('Error:', error);
     }
