@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import TicketForm from './TicketForm';
+import Navbar from './Navbar';
 import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 
@@ -12,14 +13,19 @@ const TicketList = () => {
   const [editTicket, setEditTicket] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(0);
-  const [tasksPerPage] = useState(5);
+  const [tasksPerPage] = useState(10);
   const pageCount = Math.ceil(tasks.length / tasksPerPage);
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     if (getToken) {
       setToken(getToken);
     }
   }, []);
+
+  useEffect(() => {
+    setTasks(searchResults);
+  }, [searchResults]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -86,7 +92,6 @@ const TicketList = () => {
     setTasks([...tasks, newTicket]);
   };
 
-
   const sortTable = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -111,56 +116,59 @@ const TicketList = () => {
   const paginatedTasks = sortedTasks.slice(offset, offset + tasksPerPage);
 
   return (
-    <div className='container my-3'>
-      <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={handleCreate}>Create Ticket</button>
-      <h2>Ticket List</h2>
-      <table className='task-list-table'>
-        <thead>
-          <tr>
-            <th className='cursor-pointer' onClick={() => sortTable('id')}>ID</th>
-            <th className='cursor-pointer' onClick={() => sortTable('title')}>Title</th>
-            <th className='cursor-pointer' onClick={() => sortTable('description')}>Description</th>
-            <th className='cursor-pointer' onClick={() => sortTable('status')}>Status</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedTasks.map(task => (
-            <tr key={task.id}>
-              <td>{task.id}</td>
-              <td>{task.title}</td>
-              <td>{task.description}</td>
-              <td>{task.status}</td>
-              <td>
-                <button className='btn btn-warning' data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={() => handleEdit(task.id)}>Edit</button>
-              </td>
-              <td>
-                <button className='btn btn-danger' onClick={() => handleDelete(task.id)}>Delete</button>
-              </td>
+    <>
+      <Navbar setSearchResults={setSearchResults} search_box={true} />
+      <div className='container my-3'>
+        <button type="button" className="btn btn-primary my-4" data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={handleCreate}>Create Ticket</button>
+        <h2>Ticket List</h2>
+        <table className='task-list-table'>
+          <thead>
+            <tr>
+              <th className='cursor-pointer' onClick={() => sortTable('id')}>ID</th>
+              <th className='cursor-pointer' onClick={() => sortTable('title')}>Title</th>
+              <th className='cursor-pointer' onClick={() => sortTable('description')}>Description</th>
+              <th className='cursor-pointer' onClick={() => sortTable('status')}>Status</th>
+              <th>Edit</th>
+              <th>Delete</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <TicketForm
-        ticketToEdit={editTicket}
-        onTicketCreated={handleTicketCreated}
-        onTicketUpdated={handleTicketUpdated}
-      />
-      <ReactPaginate
-        previousLabel={'Previous'}
-        nextLabel={'Next'}
-        pageCount={pageCount}
-        onPageChange={handlePageClick}
-        containerClassName={'pagination justify-content-center my-5'}
-        activeClassName={'active'}
-        previousClassName={'page-item'}
-        nextClassName={'page-item'}
-        previousLinkClassName={'page-link'}
-        nextLinkClassName={'page-link'}
-        disabledClassName={'disabled'}
-      />
-    </div>
+          </thead>
+          <tbody>
+            {paginatedTasks.map(task => (
+              <tr key={task.id}>
+                <td>{task.id}</td>
+                <td>{task.title}</td>
+                <td>{task.description}</td>
+                <td>{task.status}</td>
+                <td>
+                  <button className='btn btn-warning' data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={() => handleEdit(task.id)}>Edit</button>
+                </td>
+                <td>
+                  <button className='btn btn-danger' onClick={() => handleDelete(task.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <TicketForm
+          ticketToEdit={editTicket}
+          onTicketCreated={handleTicketCreated}
+          onTicketUpdated={handleTicketUpdated}
+        />
+        <ReactPaginate
+          previousLabel={'Previous'}
+          nextLabel={'Next'}
+          pageCount={pageCount}
+          onPageChange={handlePageClick}
+          containerClassName={'pagination justify-content-center my-5'}
+          activeClassName={'active'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+          disabledClassName={'disabled'}
+        />
+      </div>
+    </>
   );
 };
 

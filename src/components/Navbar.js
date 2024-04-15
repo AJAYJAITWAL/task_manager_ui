@@ -1,14 +1,44 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { removeToken } from '../utils/authUtils';
+import React, { useState } from 'react';
+import { getToken } from '../utils/authUtils';
+import axios from 'axios';
 
-export default function Navbar() {
+export default function Navbar({ setSearchResults, search_box }) {
   let navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    search: '',
+  });
 
   const handleLogout = (e) => {
     e.preventDefault();
     removeToken();
 
     navigate('/login')
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get('/tickets/search', {
+        headers: {
+          Authorization: getToken(),
+        },
+        params: formData,
+      });
+      console.log(response.data);
+      setSearchResults(response.data);
+      navigate('/ticket_list');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -29,10 +59,12 @@ export default function Navbar() {
                 <Link to="/user_list" className="nav-link">Users</Link>
               )}
             </ul>
-            <form className="d-flex">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-              <button className="btn btn-primary" type="submit">Search</button>
-            </form>
+            { search_box && (
+              <form className="d-flex" onSubmit={handleSearch} >
+                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" value={formData.search} onChange={handleChange}/>
+                <button className="btn btn-primary" type="submit">Search</button>
+              </form>
+            )}
             {localStorage.getItem('token') ? (
               <Link className="btn btn-danger mx-2" onClick={handleLogout}>Logout</Link>
             ) : (

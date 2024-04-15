@@ -1,8 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar';
+
 export default function Hello() {
   return (
     <>
+    <Navbar/>
     <div class="px-4 py-5 my-5 text-center">
       <img class="d-block mx-auto mb-4 rounded-circle" src="https://media.istockphoto.com/id/882396802/photo/flight-search-on-internet-buy-ticket-online.jpg?s=2048x2048&w=is&k=20&c=U5cMkroNPaIj_IuPV0m8IOfMbP5V1RG0LEfLkn7_spY=" alt="" width="100" height="100"/>
       <h1 class="display-5 fw-bold my-3">Unlock the Power: Create Your Own Ticket!</h1>
