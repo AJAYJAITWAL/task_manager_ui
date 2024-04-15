@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
-
+import ErrorMessages from './ErrorMessages';
 
 const Signup = () => {
   let navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,7 +34,15 @@ const Signup = () => {
       navigate('/login')
       console.log(response.data);
     } catch (error) {
-      console.error('Error:', error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        const errorMessages = error.response.data.errors.map((msg) => (
+          <div key={msg} className="error-message">{msg}</div>
+        ));
+        setErrorMessage(errorMessages);
+      } else {
+        console.error('Error:', error);
+        setErrorMessage(['An error occurred. Please try again.']);
+      }
     }
   };
 
@@ -42,6 +51,7 @@ const Signup = () => {
       <Navbar/>
       <div>
         <h2 className='text-center my-3'>Sign Up</h2>
+        <ErrorMessages errorMessage={errorMessage}/>
         <form onSubmit={handleSubmit}>
           <div className="mb-3 container">
             <label htmlFor="exampleFormControlInput1" className="form-label">Name</label>

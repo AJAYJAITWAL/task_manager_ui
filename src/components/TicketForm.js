@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
+import ErrorMessages from './ErrorMessages';
 
 export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpdated }) {
   let navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [token, setToken] = useState('');
   const [formData, setFormData] = useState({
@@ -55,14 +57,19 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
       console.log(response.data);
       onTicketCreated(response.data);
       closeModal();
-
-      setFormData({
-        title: '',
-        description: '',
-        status: 'pending',
-      });
+      setFormData({ title: '', description: '', status: 'pending' });
+      setErrorMessage([]);
     } catch (error) {
-      console.error('Error:', error);
+      if (error.response && error.response.data) {
+        const errorData = error.response.data;
+        const errorMessages = Object.keys(errorData).map((key) => (
+          `${key.charAt(0).toUpperCase() + key.slice(1)} ${errorData[key].join(', ')}`
+        ));
+        setErrorMessage(errorMessages);
+      } else {
+        console.error('Error:', error);
+        setErrorMessage(['An error occurred. Please try again.']);
+      }
     }
   };
 
@@ -106,6 +113,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div className="modal-body">
+                <ErrorMessages errorMessage={errorMessage}/>
                 <div className="form-group mb-3">
                   <label>Title</label>
                   <input type="text" className="form-control" name="title" value={formData.title} onChange={handleChange} />

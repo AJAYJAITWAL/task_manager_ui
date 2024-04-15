@@ -3,9 +3,11 @@ import { setToken } from '../utils/authUtils';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+import ErrorMessages from './ErrorMessages';
 
 const Login = () => {
   let navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     email: '',
@@ -31,7 +33,15 @@ const Login = () => {
       navigate('/ticket_list');
       console.log(response.data);
     } catch (error) {
-      console.error('Error:', error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        const errorMessages = error.response.data.errors.map((msg) => (
+          <div key={msg} className="error-message">{msg}</div>
+        ));
+        setErrorMessage(errorMessages);
+      } else {
+        console.error('Error:', error);
+        setErrorMessage(['invalid credentials. please try again']);
+      }
     }
   };
 
@@ -40,6 +50,7 @@ const Login = () => {
       <Navbar/>
       <div>
         <h2 className='text-center my-3'>Login</h2>
+        <ErrorMessages errorMessage={errorMessage}/>
         <h4 className='container my-3'>Please log in to access the application</h4>
         <form onSubmit={handleSubmit}>
           <div className="mb-3 container">
