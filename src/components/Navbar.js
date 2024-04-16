@@ -6,9 +6,7 @@ import axios from 'axios';
 
 export default function Navbar({ setSearchResults, search_box }) {
   let navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    search: '',
-  });
+  const [formData, setFormData] = useState({ search: '',});
 
   const handleLogout = (e) => {
     e.preventDefault();
