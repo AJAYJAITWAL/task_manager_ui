@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../store/actions/authActions';
 import Navbar from './Navbar';
 import ErrorMessages from './ErrorMessages';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   let navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
+  const dispatch = useDispatch();
+  const errorMessage = useSelector((state) => state.auth.errorMessage);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -26,24 +28,15 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await axios.post('/users', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      navigate('/login')
-      console.log(response.data);
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        const errorMessages = error.response.data.errors.map((msg) => (
-          <div key={msg} className="error-message">{msg}</div>
-        ));
-        setErrorMessage(errorMessages);
-      } else {
-        console.error('Error:', error);
-        setErrorMessage(['An error occurred. Please try again.']);
+      await dispatch(signup(formData));
+
+      if (errorMessage) {
+        navigate('/login');
       }
+    } catch (error) {
+      console.error('Signup Error:', error);
     }
   };
 

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { getToken } from '../utils/authUtils';
 import ReactPaginate from 'react-paginate';
 import Navbar from './Navbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers } from '../store/actions/userActions';
 
 const UserList = () => {
-  const [users, setUsers] = useState([]);
   const [token, setToken] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.user.users);
   const [usersPerPage] = useState(5);
   const pageCount = Math.ceil(users.length / usersPerPage);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     if (getToken) {
@@ -19,23 +21,9 @@ const UserList = () => {
 
   useEffect(() => {
     if (token) {
-      const fetcUsers = async () => {
-        try {
-          const response = await axios.get('/users', {
-            headers: {
-              Authorization: `${token}`,
-            },
-          });
-          setUsers(response.data);
-          console.log(users);
-        } catch (error) {
-          console.error('Error fetching users:', error);
-        }
-      };
-
-      fetcUsers();
+      dispatch(fetchUsers(token));
     }
-  }, [token]);
+  }, [dispatch, token]);
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);

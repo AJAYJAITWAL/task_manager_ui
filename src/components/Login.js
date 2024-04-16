@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { setToken } from '../utils/authUtils';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import ErrorMessages from './ErrorMessages';
 
 const Login = () => {
   let navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
+  const dispatch = useDispatch();
+  const errorMessage = useSelector((state) => state.auth.errorMessage);
+  const loggedIn = useSelector((state) => state.login.loggedIn);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,27 +25,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('/auth/login', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setToken(response.data);
-      navigate('/ticket_list');
-      console.log(response.data);
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        const errorMessages = error.response.data.errors.map((msg) => (
-          <div key={msg} className="error-message">{msg}</div>
-        ));
-        setErrorMessage(errorMessages);
-      } else {
-        console.error('Error:', error);
-        setErrorMessage(['invalid credentials. please try again']);
-      }
-    }
+    dispatch(login(formData));
   };
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/ticket_list');
+    }
+  }, [loggedIn, navigate]);
 
   return (
     <>
