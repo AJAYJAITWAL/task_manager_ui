@@ -113,7 +113,7 @@ const TicketList = () => {
   };
 
   const offset = currentPage * tasksPerPage;
-  const paginatedTasks = sortedTasks.slice(offset, offset + tasksPerPage);
+  const paginatedTasks = sortedTasks.slice(offset, offset + tasksPerPage).reverse();
 
   return (
     <>
