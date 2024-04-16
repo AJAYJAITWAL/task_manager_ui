@@ -12,6 +12,7 @@ const Signup = () => {
     name: '',
     email: '',
     username: '',
+    role: 'user',
     password: '',
     password_confirmation: '',
   });
@@ -64,6 +65,13 @@ const Signup = () => {
           <div className="mb-3 container">
             <label htmlFor="exampleFormControlInput3" className="form-label">Username</label>
             <input type="text" name="username" value={formData.username} onChange={handleChange} className="form-control" id="exampleFormControlInput3" placeholder="Enter your username"/>
+          </div>
+          <div className="mb-3 container">
+            <label htmlFor="role" className="form-label">Role</label>
+            <select className="form-select" id="role" name="role" value={formData.role} onChange={handleChange}>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
           <div className="mb-3 container">
             <label htmlFor="inputPassword1" className="form-label">Password</label>

@@ -53,7 +53,7 @@ export default function Navbar({ setSearchResults, search_box }) {
                 <a className="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <Link to="/ticket_list" className="nav-link">Tickets</Link>
-              {localStorage.getItem('token') && localStorage.getItem('userRole') == 'admin' && (
+              {localStorage.getItem('token') && localStorage.getItem('userRole') === 'admin' && (
                 <Link to="/user_list" className="nav-link">Users</Link>
               )}
             </ul>
