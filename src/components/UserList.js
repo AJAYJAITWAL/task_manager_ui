@@ -9,7 +9,7 @@ const UserList = () => {
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
-  const [usersPerPage] = useState(5);
+  const [usersPerPage] = useState(10);
   const pageCount = Math.ceil(users.length / usersPerPage);
   const [currentPage, setCurrentPage] = useState(0);
 

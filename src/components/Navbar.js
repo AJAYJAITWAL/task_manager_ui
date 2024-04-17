@@ -64,7 +64,10 @@ export default function Navbar({ setSearchResults, search_box }) {
               </form>
             )}
             {localStorage.getItem('token') ? (
-              <Link className="btn btn-danger mx-2" onClick={handleLogout}>Logout</Link>
+              <>
+                <span className="ms-3 fw-bold text-muted">{localStorage.getItem('userName')}</span>
+                <Link className="btn btn-danger mx-2" onClick={handleLogout}>Logout</Link>
+              </>
             ) : (
               <>
                 <Link to="/login" className="mx-2 btn btn-primary">Login</Link>
