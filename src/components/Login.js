@@ -8,7 +8,7 @@ import ErrorMessages from './ErrorMessages';
 const Login = () => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
-  const errorMessage = useSelector((state) => state.auth.errorMessage);
+  const errorMessage = useSelector((state) => state.login.errorMessage);
   const loggedIn = useSelector((state) => state.login.loggedIn);
 
   const [formData, setFormData] = useState({
@@ -44,11 +44,11 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-3 container">
             <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required/>
           </div>
           <div className="mb-3 container">
             <label htmlFor="inputPassword" className="form-label">Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" id="inputPassword" placeholder="Password"/>
+            <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" id="inputPassword" placeholder="Password" required/>
           </div>
           <div className="mb-3 container">
             <button type="submit" className="btn btn-primary mb-3">Login</button>
