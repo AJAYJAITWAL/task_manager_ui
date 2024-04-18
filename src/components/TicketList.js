@@ -29,6 +29,7 @@ const TicketList = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+
     if (!token) {
       navigate('/login');
     }
@@ -67,6 +68,7 @@ const TicketList = () => {
     const updatedTasks = tasks.map(task =>
       task.id === updatedTicket.id ? updatedTicket : task
     );
+
     setTasks(updatedTasks);
   };
 
@@ -94,6 +96,7 @@ const TicketList = () => {
 
   const sortTable = (key) => {
     let direction = 'asc';
+
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }

@@ -8,6 +8,7 @@ export const fetchUsers = (token) => {
           Authorization: `${token}`,
         },
       });
+
       dispatch({ type: 'FETCH_USERS_SUCCESS', payload: response.data });
     } catch (error) {
       console.error('Error fetching users:', error);

@@ -7,7 +7,6 @@ import axios from 'axios';
 export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpdated }) {
   let navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
-
   const [token, setToken] = useState('');
   const [formData, setFormData] = useState({
     title: '',
@@ -17,6 +16,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
 
   useEffect(() => {
     const tokenFromStorage = getToken();
+
     if (tokenFromStorage) {
       setToken(tokenFromStorage);
     }
@@ -47,6 +47,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post('/tickets', formData, {
         headers: {
@@ -65,6 +66,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
         const errorMessages = Object.keys(errorData).map((key) => (
           `${key.charAt(0).toUpperCase() + key.slice(1)} ${errorData[key].join(', ')}`
         ));
+
         setErrorMessage(errorMessages);
       } else {
         console.error('Error:', error);
@@ -75,6 +77,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
 
   const handleUpdateTask = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.put(`/tickets/${ticketToEdit.id}`, formData, {
         headers: {
@@ -92,10 +95,12 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
 
   const closeModal = () => {
     const modal = document.getElementById('createTaskModal');
+
     if (modal) {
       modal.classList.remove('show');
       modal.style.display = 'none';
       const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
+
       if (modalBackdrop) {
         modalBackdrop.parentNode.removeChild(modalBackdrop);
       }

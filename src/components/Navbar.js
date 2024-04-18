@@ -9,8 +9,8 @@ export default function Navbar({ setSearchResults, search_box }) {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    removeToken();
 
+    removeToken();
     navigate('/login')
   };
 
@@ -23,6 +23,7 @@ export default function Navbar({ setSearchResults, search_box }) {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.get('/tickets', {
         headers: {

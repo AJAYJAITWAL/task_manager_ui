@@ -10,7 +10,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const errorMessage = useSelector((state) => state.login.errorMessage);
   const loggedIn = useSelector((state) => state.login.loggedIn);
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -25,6 +24,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     dispatch(login(formData));
   };
 

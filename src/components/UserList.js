@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 
 const UserList = () => {
-  const [token, setToken] = useState('');
   const dispatch = useDispatch();
+  const [token, setToken] = useState('');
   const users = useSelector((state) => state.user.users);
   const [usersPerPage] = useState(10);
   const pageCount = Math.ceil(users.length / usersPerPage);

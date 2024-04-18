@@ -14,6 +14,7 @@ export const signup = (userData) => {
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         const errorMessages = error.response.data.errors.map((msg) => msg);
+
         dispatch({ type: 'SIGNUP_ERROR', payload: errorMessages });
       } else {
         console.error('Error:', error);
@@ -31,11 +32,13 @@ export const login = (formData) => {
           'Content-Type': 'application/json',
         },
       });
+
       setToken(response.data);
       dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         const errorMessages = error.response.data.errors;
+
         dispatch({ type: 'LOGIN_ERROR', payload: errorMessages });
       } else {
         console.error('Error:', error);
