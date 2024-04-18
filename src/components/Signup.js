@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { signup } from '../store/actions/authActions';
 import Navbar from './Navbar';
 import ErrorMessages from './ErrorMessages';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Signup = () => {
   let navigate = useNavigate();

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { getToken } from '../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
+import { getToken } from '../utils/authUtils';
 import ErrorMessages from './ErrorMessages';
+import axios from 'axios';
 
 export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpdated }) {
   let navigate = useNavigate();
@@ -97,7 +97,7 @@ export default function TicketForm({ ticketToEdit, onTicketCreated, onTicketUpda
       modal.style.display = 'none';
       const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0];
       if (modalBackdrop) {
-        modalBackdrop.parentNode.removeChild(modalBackdrop); // Remove the modal backdrop
+        modalBackdrop.parentNode.removeChild(modalBackdrop);
       }
     }
   };

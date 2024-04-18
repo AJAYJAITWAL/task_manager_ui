@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/authUtils';
 import TicketForm from './TicketForm';
 import Navbar from './Navbar';
-import { useNavigate } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import axios from 'axios';
 
 const TicketList = () => {
   let navigate = useNavigate();
@@ -139,12 +139,8 @@ const TicketList = () => {
                 <td>{task.title}</td>
                 <td>{task.description}</td>
                 <td>{task.status}</td>
-                <td>
-                  <button className='btn btn-warning' data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={() => handleEdit(task.id)}>Edit</button>
-                </td>
-                <td>
-                  <button className='btn btn-danger' onClick={() => handleDelete(task.id)}>Delete</button>
-                </td>
+                <td><button className='btn btn-warning' data-bs-toggle="modal" data-bs-target="#createTaskModal" onClick={() => handleEdit(task.id)}>Edit</button></td>
+                <td><button className='btn btn-danger' onClick={() => handleDelete(task.id)}>Delete</button></td>
               </tr>
             ))}
           </tbody>

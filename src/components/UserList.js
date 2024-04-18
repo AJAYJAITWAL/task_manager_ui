@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getToken } from '../utils/authUtils';
-import ReactPaginate from 'react-paginate';
 import Navbar from './Navbar';
-import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers } from '../store/actions/userActions';
+import { useDispatch, useSelector } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 
 const UserList = () => {
   const [token, setToken] = useState('');
@@ -30,7 +30,7 @@ const UserList = () => {
   };
 
   const offset = currentPage * usersPerPage;
-  const paginatedUsers = users.slice(offset, offset + usersPerPage);
+  const paginatedUsers = users.slice(offset, offset + usersPerPage).reverse();
 
 
   return (

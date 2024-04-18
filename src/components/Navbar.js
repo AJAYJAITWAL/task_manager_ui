@@ -1,7 +1,6 @@
-import { useNavigate, Link } from 'react-router-dom';
-import { removeToken } from '../utils/authUtils';
 import React, { useState } from 'react';
-import { getToken } from '../utils/authUtils';
+import { useNavigate, Link } from 'react-router-dom';
+import { removeToken, getToken } from '../utils/authUtils';
 import axios from 'axios';
 
 export default function Navbar({ setSearchResults, search_box }) {
@@ -25,7 +24,7 @@ export default function Navbar({ setSearchResults, search_box }) {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('/tickets/search', {
+      const response = await axios.get('/tickets', {
         headers: {
           Authorization: getToken(),
         },
